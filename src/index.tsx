@@ -4,11 +4,14 @@ import { renderer } from './renderer'
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 import playwright from 'playwright';
+import { serveStatic } from '@hono/node-server/serve-static'
+
 // Importar constantes desde archivo separado para mejor mantenibilidad
 import { CORTES_MAP, TRIBUNALES_MAP, COMPETENCIA_MAP } from './tribunales';
 
 const app = new Hono()
 
+app.use('/static/*', serveStatic({ root: './' }))
 app.use(renderer)
 app.use('/api/*', cors())
 
