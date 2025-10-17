@@ -71,8 +71,15 @@ app.post('/api/buscar-nombre', async (c) => {
       return c.json({ error: 'No se encontró información para los criterios especificados' }, 404)
     }
 
-    // Traducir con Gemini AI
-    const translation = await translateLegalText(rawData, (c.env as any)?.GEMINI_API_KEY)
+    // --- CORRECCIÓN FINAL ---
+    // Lee la clave de API desde el entorno de proceso de Node.js, no desde c.env
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    // Log para verificar si la clave fue encontrada en Render
+    console.log(`API Key found: ${apiKey ? 'Yes' : 'No'}`);
+
+    // Pasa la clave correcta a la función de traducción
+    const translation = await translateLegalText(rawData, apiKey);
 
     const searchInfo = tipoPersona === 'natural' 
       ? `${apellidoPaterno || ''} ${apellidoMaterno || ''} ${nombres || ''}`.trim()
