@@ -31,7 +31,8 @@ app.post('/api/buscar-nombre', async (c) => {
       corte
     } = requestData
 
-    console.log('Datos recibidos:', requestVERDE)
+    // --- CORRECCIÓN DEL TYPO AQUÍ ---
+    console.log('Datos recibidos:', requestData) // <- Era requestVERDE, ahora está correcto
 
     // Validaciones (estas ya funcionan bien)
     if (!tipoPersona || !['natural', 'juridica'].includes(tipoPersona)) {
@@ -63,8 +64,7 @@ app.post('/api/buscar-nombre', async (c) => {
     if (!rawData) {
       return c.json({ error: 'No se encontró información para los criterios especificados' }, 404)
     }
-
-    // --- LÍNEA CLAVE REVERTIDA ---
+    
     // Leemos la clave de API desde el contexto `c.env` que nuestro `server.js` modificado está proveyendo.
     const translation = await translateLegalText(rawData, (c.env as any)?.GEMINI_API_KEY)
 
