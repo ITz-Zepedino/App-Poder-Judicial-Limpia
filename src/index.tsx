@@ -31,13 +31,12 @@ app.post('/api/buscar-nombre', async (c) => {
       corte
     } = requestData
 
-    console.log('Datos recibidos:', requestData)
+    console.log('Datos recibidos:', requestVERDE)
 
-    // Validaciones según tipo de persona
+    // Validaciones (estas ya funcionan bien)
     if (!tipoPersona || !['natural', 'juridica'].includes(tipoPersona)) {
       return c.json({ error: 'Debe especificar tipo de persona: natural o jurídica' }, 400)
     }
-
     if (tipoPersona === 'natural') {
       if (!nombres && !apellidoPaterno && !apellidoMaterno) {
         return c.json({ error: 'Para persona natural debe ingresar al menos: nombres, apellido paterno o apellido materno' }, 400)
@@ -47,16 +46,10 @@ app.post('/api/buscar-nombre', async (c) => {
         return c.json({ error: 'Para persona jurídica debe ingresar el nombre de la empresa/organización' }, 400)
       }
     }
-
-    // Validar campos obligatorios
     if (!año || !competencia) {
       return c.json({ error: 'Año y competencia son obligatorios' }, 400)
     }
-
-    // Validar dependencias según competencia
-    if (competencia === 'Corte Suprema') {
-      // Corte Suprema no necesita tribunal ni corte
-    } else {
+    if (competencia !== 'Corte Suprema') {
       if (!tribunal || !corte) {
         return c.json({ error: `Para ${competencia} se requiere tribunal y corte` }, 400)
       }
@@ -64,22 +57,16 @@ app.post('/api/buscar-nombre', async (c) => {
 
     console.log(`Realizando búsqueda por nombre: ${tipoPersona} - Competencia: ${competencia}`)
 
-    // Realizar web scraping real al Poder Judicial
+    // El scraping que ya está funcionando correctamente
     const rawData = await performRealWebScraping(requestData)
     
     if (!rawData) {
       return c.json({ error: 'No se encontró información para los criterios especificados' }, 404)
     }
 
-    // --- CORRECCIÓN FINAL ---
-    // Lee la clave de API desde el entorno de proceso de Node.js, no desde c.env
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    // Log para verificar si la clave fue encontrada en Render
-    console.log(`API Key found: ${apiKey ? 'Yes' : 'No'}`);
-
-    // Pasa la clave correcta a la función de traducción
-    const translation = await translateLegalText(rawData, apiKey);
+    // --- LÍNEA CLAVE REVERTIDA ---
+    // Leemos la clave de API desde el contexto `c.env` que nuestro `server.js` modificado está proveyendo.
+    const translation = await translateLegalText(rawData, (c.env as any)?.GEMINI_API_KEY)
 
     const searchInfo = tipoPersona === 'natural' 
       ? `${apellidoPaterno || ''} ${apellidoMaterno || ''} ${nombres || ''}`.trim()
