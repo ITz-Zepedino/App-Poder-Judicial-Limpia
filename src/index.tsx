@@ -11,7 +11,7 @@ import { CORTES_MAP, TRIBUNALES_MAP, COMPETENCIA_MAP } from './tribunales';
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: './' }))
+app.use('/static/*', serveStatic({ root: './dist' }))
 app.use(renderer)
 app.use('/api/*', cors())
 
