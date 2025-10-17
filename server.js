@@ -13,7 +13,20 @@ console.log(`📍 Puerto: ${port}`);
 console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
 
 serve({
-  fetch: app.fetch,
+  /**
+   * --- ADAPTADOR DE ENTORNO ---
+   * Esta función intercepta cada solicitud.
+   * Crea un objeto `env` que imita al de Cloudflare y le pasa la
+   * GEMINI_API_KEY desde el `process.env` de Node.js.
+   * La aplicación Hono ahora podrá acceder a ella a través de `c.env`.
+   */
+  fetch: (req, env, ctx) => {
+    const honoEnv = {
+      ...env,
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY
+    };
+    return app.fetch(req, honoEnv, ctx);
+  },
   port
 });
 
