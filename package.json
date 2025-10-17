@@ -1,0 +1,52 @@
+{
+  "name": "justicia-clara",
+  "version": "2.0.0",
+  "description": "Aplicación web para traducir información judicial chilena a lenguaje simple usando IA",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "test": "curl http://localhost:3000",
+    "playwright:install": "npx playwright install chromium --with-deps",
+    "docker:build": "docker build -t justicia-clara .",
+    "docker:run": "docker run -p 3000:3000 justicia-clara",
+    "git:init": "git init && git add . && git commit -m 'Initial commit'",
+    "git:commit": "git add . && git commit -m",
+    "git:status": "git status",
+    "git:log": "git log --oneline"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@hono/node-server": "^1.19.5",
+    "@types/cheerio": "^0.22.35",
+    "@types/node": "^24.8.0",
+    "cheerio": "^1.1.2",
+    "hono": "^4.10.0",
+    "playwright": "^1.56.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@hono/vite-build": "^1.2.0",
+    "@hono/vite-dev-server": "^0.18.2",
+    "tsx": "^4.20.6",
+    "vite": "^6.3.5",
+    "wrangler": "^4.4.0"
+  },
+  "keywords": [
+    "justicia",
+    "chile",
+    "poder-judicial",
+    "web-scraping",
+    "ia",
+    "gemini",
+    "playwright"
+  ],
+  "author": "Justicia Clara Team",
+  "license": "MIT"
+}
