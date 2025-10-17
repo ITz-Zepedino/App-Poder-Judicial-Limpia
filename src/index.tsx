@@ -109,7 +109,7 @@ async function performRealWebScraping(searchData: any): Promise<string | null> {
   console.log('Iniciando web scraping (Estrategia: Unificada)...');
   let browser: playwright.Browser | null = null; 
   try {
-    browser = await playwright.chromium.launch({ headless: false }); 
+    browser = await playwright.chromium.launch({ headless: true }); 
     const context = await browser.newContext({
       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
       ignoreHTTPSErrors: true,
